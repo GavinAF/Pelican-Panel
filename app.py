@@ -296,7 +296,7 @@ def selected(slug):
 @app.route("/users")
 @login_required
 def users():
-    return render_template("users.html")
+    return render_template("users.html", current_username = session.get("username"))
 
 @app.route("/settings")
 @login_required
