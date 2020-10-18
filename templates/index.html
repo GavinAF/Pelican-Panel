@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+<li><a href="{{ url_for ('servers') }}">Servers</a></li>
+<li><a href="{{ url_for ('users') }}">Users</a></li>
+<li><a href="{{ url_for ('settings') }}">Settings</a></li>
+<li><a href="#">Support</a></li>
+{% endblock %}
+
+{% block header %}Welcome, {{ current_username }}{% endblock %}
+
+
+{% block body %}
+
+<!-- Grid row -->
+<div class="row">
+
+    <!-- Grid column -->
+    <div class="col-lg-4 col-md-12">
+  
+<!-- Card -->
+<div class="card">
+
+    <!-- Card image -->
+    <div class="view overlay">
+        <div id="serverIcon"></div>
+      <a href="{{ url_for ('servers') }}">
+        <div class="mask rgba-white-slight"></div>
+      </a>
+    </div>
+  
+    <!-- Card content -->
+    <div class="card-body">
+  
+      <!-- Title -->
+      <h4 class="card-title">Servers</h4>
+      <!-- Text -->
+      <p class="card-text">Add, remove and manage servers.</p>
+  
+    </div>
+  
+  </div>
+  <!-- Card -->
+  
+    </div>
+    <!-- Grid column -->
+  
+    <!-- Grid column -->
+    <div class="col-lg-4 col-md-6">
+  
+<!-- Card -->
+<div class="card">
+
+    <!-- Card image -->
+    <div class="view overlay">
+        <div id="usersIcon"></div>
+      <a href="{{ url_for ('users') }}">
+        <div class="mask rgba-white-slight"></div>
+      </a>
+    </div>
+  
+    <!-- Card content -->
+    <div class="card-body">
+  
+      <!-- Title -->
+      <h4 class="card-title">Users</h4>
+      <!-- Text -->
+      <p class="card-text">Manage and modify panel users.</p>
+  
+    </div>
+  
+  </div>
+  <!-- Card -->
+  
+    </div>
+    <!-- Grid column -->
+  
+    <!-- Grid column -->
+    <div class="col-lg-4 col-md-6">
+  
+<!-- Card -->
+<div class="card">
+
+    <!-- Card image -->
+    <div class="view overlay">
+        <div id="settingsIcon"></div>
+      <a href="{{ url_for ('settings') }}">
+        <div class="mask rgba-white-slight"></div>
+      </a>
+    </div>
+  
+    <!-- Card content -->
+    <div class="card-body">
+  
+      <!-- Title -->
+      <h4 class="card-title">Settings</h4>
+      <!-- Text -->
+      <p class="card-text">Modify panel specific settings and config.</p>
+  
+    </div>
+  
+  </div>
+  <!-- Card -->
+  
+    </div>
+    <!-- Grid column -->
+  
+  </div>
+  <!-- Grid row -->
+
+{% endblock %}

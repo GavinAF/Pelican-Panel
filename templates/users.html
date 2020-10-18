@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}Users{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+<li><a href="{{ url_for ('servers') }}">Servers</a></li>
+<li><a class="active" href="{{ url_for ('users') }}">Users</a></li>
+<li><a href="{{ url_for ('settings') }}">Settings</a></li>
+<li><a href="#">Support</a></li>
+{% endblock %}
+
+{% block header %}Users{% endblock %}
+
+
+{% block body %}
+
+  
+{% endblock %}

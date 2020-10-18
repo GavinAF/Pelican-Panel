@@ -1,0 +1,45 @@
+<thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Status</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for server in server_data %}
+    <tr>
+      <th class="align-middle" scope="row">{{ loop.index }}</th>
+      <td class="align-middle">{{ server[2] }}</td>
+      <td class="align-middle">
+
+        {% if players[loop.index - 1] == "Offline" %}
+          Offline
+        {% else %}
+          Online ({{ players[loop.index - 1] }}/{{ server[3] }} Players)
+        {% endif %}
+
+      </td>
+
+      <td>
+
+        {% if players[loop.index - 1] == "Offline" %}
+          <a type="button" class="btn-floating btn-success"><i class="fas fa-play fa-lg" aria-hidden="true"></i></a>
+          <a type="button" class="btn-floating btn-info"><i class="fas fa-pen fa-lg" aria-hidden="true"></i></a>
+
+          <!-- Delete Button -->
+          <a id="delete-button" type="button" data-id="{{ server[0] }}" class="btn-floating btn-danger"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
+        {% else %}
+          <a type="button" class="btn-floating btn-warning"><i class="fas fa-redo-alt fa-lg" aria-hidden="true"></i></a>
+          <a type="button" class="btn-floating btn-deep-orange"><i class="fas fa-stop fa-lg" aria-hidden="true"></i></a>
+          <a type="button" class="btn-floating btn-info"><i class="fas fa-pen fa-lg" aria-hidden="true"></i></a>
+        {% endif %}      
+
+
+      </td>
+    </tr>
+    {% endfor %}
+
+
+  </tbody>

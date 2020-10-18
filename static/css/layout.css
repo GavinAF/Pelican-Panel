@@ -1,0 +1,135 @@
+/* Toolbar */
+.font-color-custom-blue {
+    color: #38a3d9 !important;
+}
+
+
+/* Sidebar */
+#sidebar-wrapper {
+    z-index: 1;
+    position: fixed;
+    width: 18%;
+    max-width: 334px;
+    height: 100%;
+    overflow-y: hidden;
+    background-color: #252D3A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Sidebar Styling */
+.sidebar-nav {
+    padding: 0;
+    list-style: none;
+}
+.sidebar-nav li {
+    line-height: 40px;
+    padding-bottom: 15px;
+    width: 334px;
+    text-align: center;
+}
+.sidebar-nav li a{
+    display: block;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; 
+}
+.sidebar-nav li a:hover {
+    background: #005580;
+}
+
+.sidebar-nav li a.active {
+    background: #0E151D;
+}
+
+/* Main Content */
+body {
+    background-color: #EDF0FB;
+    min-height: 100vh;
+}
+#wrapper {
+    padding-top: 56px;
+}
+
+#page-content-wrapper {
+width: 100%;
+position: absolute;
+padding: 50px;
+padding-left: 18%;
+/* border: 5px solid green; */
+/* height: 100vh; */
+}
+
+.container-fluid {
+    width: 80% !important;
+}
+
+/* Footer */
+
+
+
+/* Index */
+#serverIcon {
+    background: url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/57f1632d7303fbcd8974425882ffd9919fc4041b/svgs/solid/server.svg") no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: auto;
+    height: 300px;
+    width: 300px;
+}
+
+#usersIcon {
+    background: url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/57f1632d7303fbcd8974425882ffd9919fc4041b/svgs/solid/users.svg") no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: auto;
+    height: 300px;
+    width: 300px;
+}
+
+#settingsIcon {
+    background: url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/57f1632d7303fbcd8974425882ffd9919fc4041b/svgs/solid/cogs.svg") no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: auto;
+    height: 300px;
+    width: 300px;
+}
+
+.view {
+    display: grid !important;
+    justify-content: center !important;
+}
+
+
+/* Servers */
+.servers-table tbody tr td {
+    font-size: 18px;
+}
+
+.servers-table tbody tr th {
+    font-size: 18px;
+}
+
+#modalCreate .btn-primary {
+    background-color: #0093DC !important;
+}
+
+#modalCreate .btn-outline-primary {
+    border-color: #0093DC !important;
+}
+
+#checkEula {
+    display: flex;
+    justify-content: center;
+}
+
+#modalCreate .modal-header {
+    background-color: #252D3A !important;
+}
