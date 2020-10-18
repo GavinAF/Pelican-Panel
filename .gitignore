@@ -1,0 +1,4 @@
+/.vscode/*
+/config.py
+/wexpect.log
+/__pycache__/*
