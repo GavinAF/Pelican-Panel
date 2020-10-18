@@ -1,0 +1,135 @@
+body {
+    background-color: #EDF0FB;
+    color: #252d3a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+@font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI Light"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/light/latest.ttf) format("truetype");
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI Semilight"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semilight/latest.ttf) format("truetype");
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/normal/latest.ttf) format("truetype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI Bold"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/bold/latest.ttf) format("truetype");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: SegoeUI;
+    src:
+        local("Segoe UI Semibold"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.woff2) format("woff2"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.woff) format("woff"),
+        url(//c.s-microsoft.com/static/fonts/segoe-ui/west-european/semibold/latest.ttf) format("truetype");
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'CrafterSans';
+    src: url('../font/UbisoftSans_400.otf')
+}
+
+.container {
+    height: 100vh;
+}
+
+.header-text {
+    font-family: 'CrafterSans';
+    color: #6f7587;
+    font-size: 2rem;
+    font-weight: 400;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.content {
+    background-color: white;
+}
+
+.branding {
+    margin-bottom: 40px;
+    padding: 30px 0; }
+    .branding .logo {
+        display: block;
+        width: 273px;
+        max-width: 273px;
+        height: 61px;
+        margin: 0 auto;
+    }
+
+.branding {
+    background-color: #000; }
+    .branding .logo {
+        background: url(../images/logo.svg) no-repeat center center;
+    }
+
+.branding {
+    background : #252D3A;
+}
+
+.login-text {
+    color: #252d3a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 24px;
+    float: left;
+    /* text-align: start; */
+}
+
+.register-link {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: 500;
+    float: right;
+    text-transform: uppercase;
+}
+
+.custom-form * {
+    color: #202020 !important;
+    border-color: #202020 !important;
+    border-width: 2px !important;
+}
+
+.login-register-container {
+    text-align: center; }
+    .login-register-container * {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+.invalid-feedback {
+    border-color: #f76363 !important;
+}

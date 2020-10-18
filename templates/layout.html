@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Pelican Panel | {% block title %}{% endblock %}</title>
+  <!-- Line Awesome -->
+  <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css">
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="static/css/bootstrap.min.css">
+  <!-- Material Design Bootstrap -->
+  <link rel="stylesheet" href="static/css/mdb.min.css">
+  <!-- Custom Login Page CSS -->
+  <link rel="stylesheet" href="static/css/layout.css">
+  <!-- Line Awesome Icons -->
+  <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css">
+
+  {% block head %}
+  {% endblock %}
+
+</head>
+
+<body>
+
+    <!-- Toolbar -->
+    <nav class="navbar navbar-expand-sm fixed-top navbar-light" style="background-color: white !important; ">
+        <a class="navbar-brand font-weight-bold" href="{{ url_for ('index') }}">Pelican Panel Logo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-3" aria-controls="navbarSupportedContent-3" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent-3">
+ 
+          <ul class="navbar-nav ml-auto nav-flex-icons">
+
+
+            <!-- <li class="nav-item">
+              <a class="nav-link waves-effect waves-light">
+                <i class="fas fa-bug"></i>
+                Report a bug
+              </a>
+            </li> -->
+
+
+            <li id="toolbarNav" class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle waves-effect waves-light font-weight-bold" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <i class="fas fa-user fa-lg"></i>
+                {{ current_username }}
+              </a>
+              <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item waves-effect waves-light font-weight-bold font-color-custom-blue" href="{{ url_for ('logout') }}">
+                  <i class="fas fa-sign-out-alt fa-lg"></i>
+                  Log out
+                </a>
+              </div>
+            </li>
+          </ul>
+
+        </div>
+      </nav>
+
+  <div id="wrapper">
+
+
+
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav sticky-top sidebar-offset">
+
+            {% block sidebar %}
+            {% endblock %}
+
+        </ul>
+    </div>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+
+
+                    <h1>{% block header %}{% endblock %}</h1>
+                    {% block test %}
+                    {% endblock %}
+                    <hr />
+
+
+                    {% block body %}
+                    {% endblock %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+      <!-- Footer -->
+      <footer class="page-footer fixed-bottom font-small" style="background: #0E151D;">
+
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2020 Copyright:
+          <a href="#"> PelicanPanel.website</a>
+        </div>
+        <!-- Copyright -->
+      
+      </footer>
+      <!-- Footer -->
+
+  </div>
+
+
+
+  <!-- SCRIPTS -->
+  <!-- JQuery -->
+  <script src="static/js/jquery-3.4.1.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script src="static/js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script src="static/js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script src="static/js/mdb.min.js"></script>
+  <!--Custom scripts-->
+  {% block custom_scripts %}
+  {% endblock %}
+
+</body>
+
+</html>
