@@ -10,7 +10,7 @@ import rpyc
 import os
 
 # Custom
-from helpers import login_required, login_user, create_user, get_servers, create_server, remove_server
+from helpers import login_required, login_user, create_user, get_servers, create_server, remove_server, get_users, remove_user, create_user_panel
 
 
 # Set application
@@ -296,7 +296,55 @@ def selected(slug):
 @app.route("/users")
 @login_required
 def users():
-    return render_template("users.html", current_username = session.get("username"))
+
+
+    users = get_users()
+
+    return render_template("users.html", current_username = session.get("username"), user_data=users)
+
+@app.route("/users/fetch", methods=["GET", "POST"])
+@login_required
+def users_fetch():
+    if request.method == "GET":
+
+        users = get_users()
+
+        return render_template("users_table.html", user_data=users)
+
+    else:
+        return redirect("/")
+
+@app.route("/users/remove", methods=["GET", "POST"])
+@login_required
+def users_remove():
+
+    if request.method == "POST":
+
+        user_id = request.form.get("user_id")
+
+        remove_user(user_id)
+
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+    else:
+        return redirect("/")
+
+@app.route("/users/create", methods=["GET", "POST"])
+@login_required
+def users_create():
+
+    if request.method == "POST":
+
+        username = request.form.get("username")
+        password = request.form.get("password")
+        email = request.form.get("email")
+
+        create_user_panel(username, password, email)
+
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
+    else:
+        return redirect("/")
 
 @app.route("/settings")
 @login_required
