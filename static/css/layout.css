@@ -133,3 +133,12 @@ padding-left: 18%;
 #modalCreate .modal-header {
     background-color: #252D3A !important;
 }
+
+/* Users */
+.users-table tbody tr td {
+    font-size: 18px;
+}
+
+.users-table tbody tr th {
+    font-size: 18px;
+}
