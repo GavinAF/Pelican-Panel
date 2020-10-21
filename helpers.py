@@ -176,10 +176,10 @@ def remove_server(server_id):
 
         cur.execute(remove_server_query, (server_id, user_id))
         conn.commit()
-        print("Removed server into database")
+        print("Removed server from database")
 
     except (Exception, psycopg2.DatabaseError) as error :
-        print ("Error while removing server into database", error)
+        print ("Error while removing server from database", error)
         # return False
     finally:
         # Closing database connection.
@@ -190,9 +190,40 @@ def remove_server(server_id):
 
             # return True
 
+def get_users():
 
+    # Get users from database
+    try:
+        conn = psycopg2.connect(
+            host = db_info['host'],
+            database= db_info['database'],
+            user = db_info['username'],
+            password = db_info['password'],
+            port = db_info['port'])
 
-    # Start server from database
+        cur = conn.cursor()
+
+        select_servers_query = '''SELECT * FROM users'''
+
+        cur.execute(select_servers_query)
+        rows = cur.fetchall()
+        conn.commit()
+        print("Selected users from database")
+
+    except (Exception, psycopg2.DatabaseError) as error :
+        print ("Error while selecting user data from database", error)
+        return False
+    finally:
+        # Closing database connection
+            if(conn):
+                cur.close()
+                conn.close()
+                print("PostgreSQL connection is closed")
+                
+            return rows
+
+def remove_user(user_id):
+    # Remove user from database
     try:
         conn = psycopg2.connect(
             host = db_info['host'],
@@ -204,16 +235,14 @@ def remove_server(server_id):
         cur = conn.cursor()
         
         # print(username, password, email)
-        remove_server_query = '''DELETE FROM servers WHERE server_id = %s AND user_id = %s'''
+        remove_server_query = '''DELETE FROM users WHERE id = %s'''
 
-        user_id = session["user_id"]
-
-        cur.execute(remove_server_query, (server_id, user_id))
+        cur.execute(remove_server_query, (user_id, ))
         conn.commit()
-        print("Removed server into database")
+        print("Removed user from database")
 
     except (Exception, psycopg2.DatabaseError) as error :
-        print ("Error while removing server into database", error)
+        print ("Error while removing user from database", error)
         # return False
     finally:
         # Closing database connection.
@@ -223,3 +252,34 @@ def remove_server(server_id):
                 print("PostgreSQL connection is closed")
 
             # return True
+
+def create_user_panel(username, password, email):
+    # Insert user into database
+    try:
+        conn = psycopg2.connect(
+            host = db_info['host'],
+            database= db_info['database'],
+            user = db_info['username'],
+            password = db_info['password'],
+            port = db_info['port'])
+
+        cur = conn.cursor()
+        
+        # print(username, password, email)
+        insert_user_query = '''INSERT INTO users (username, passhash, email) VALUES (%s, %s, %s)'''
+
+        cur.execute(insert_user_query, (username, generate_password_hash(password), email))
+        conn.commit()
+        print("Inserted user into database")
+
+    except (Exception, psycopg2.DatabaseError) as error :
+        print ("Error while inserting user into database", error)
+        return False
+    finally:
+        # Closing database connection.
+            if(conn):
+                cur.close()
+                conn.close()
+                print("PostgreSQL connection is closed")
+
+            return True

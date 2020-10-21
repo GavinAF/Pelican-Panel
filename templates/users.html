@@ -12,10 +12,217 @@
 <li><a href="#">Support</a></li>
 {% endblock %}
 
-{% block header %}Users{% endblock %}
+{% block header %}Users<span class="table-add float-right mb-3 mr-2"><a href="#" data-toggle="modal" data-target="#modalNewUser" class="text-success"><i
+    class="fas fa-plus" aria-hidden="true"></i></a></span>{% endblock %}
 
 
 {% block body %}
 
+<div class="modal fade" id="modalNewUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Create User</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form id="formCreateUser" action="{{ url_for ('users_create') }}">
+
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <i class="fas fa-user prefix grey-text"></i>
+          <input name="username" type="text" id="usernameInput" class="form-control validate" required>
+          <label data-error="" data-success="" for="usernameInput">Username</label>
+        </div>
+        <div class="md-form mb-5">
+          <i class="fas fa-envelope prefix grey-text"></i>
+          <input name="email" type="email" id="emailInput" class="form-control validate" required>
+          <label data-error="" data-success="" for="emailInput">Email</label>
+        </div>
+
+        <div class="md-form mb-4">
+          <i class="fas fa-lock prefix grey-text"></i>
+          <input name="password" type="password" id="passwordInput" class="form-control validate" required>
+          <label data-error="" data-success="" for="passwordInput">Password</label>
+        </div>
+
+        <div class="md-form mb-5">
+
+            <i class="fas fa-user-tag prefix grey-text"></i>
+
+            <select id="roleInput" name="jar" class="form-control custom-select" required>
+              <option value="Basic" selected>User Role</option>
+              <option value="Basic">Basic</option>
+              <option value="Mod">Mod</option>
+              <option value="Admin">Admin</option>
+            </select>
+
   
+          </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button class="btn btn-primary waves-effect waves-light" type="submit">Create User</button>
+      </div>
+
+    </form>
+
+    </div>
+  </div>
+</div>
+
+
+<div id="alert-container"></div>
+
+<table class="table table-striped users-table">
+
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Username</th>
+      <th scope="col">Email</th>
+      <th scope="col">Role</th>
+      <th scope="col">Actions</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for user in user_data %}
+    <tr>
+      <th class="align-middle" scope="row">{{ loop.index }}</th>
+      <td class="align-middle">{{ user[1] }}</td>
+      <td class="align-middle">{{ user[4] }}</td>
+      <td class="align-middle">{{ user[3] }}</td>
+
+      <td>
+
+          <!-- Edit Button -->
+          <a id="edit-button" type="button" data-id="{{ user[0] }}" class="btn-floating btn-info"><i class="fas fa-pen fa-lg" aria-hidden="true"></i></a>
+
+          <!-- Delete Button -->
+          <a id="delete-button" type="button" data-id="{{ user[0] }}" class="btn-floating btn-danger"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
+
+      </td>
+    </tr>
+    {% endfor %}
+
+
+  </tbody>
+
+</table>
+
+  
+{% endblock %}
+
+{% block custom_scripts %}
+
+<!-- Script that uses ajaxSetup to configure csrf token when using ajax for POST -->
+<script>
+
+    $.ajaxSetup({ 
+         beforeSend: function(xhr, settings) {
+             function getCookie(name) {
+                 var cookieValue = null;
+                 if (document.cookie && document.cookie != '') {
+                     var cookies = document.cookie.split(';');
+                     for (var i = 0; i < cookies.length; i++) {
+                         var cookie = jQuery.trim(cookies[i]);
+                         // Does this cookie string begin with the name we want?
+                         if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                             cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                             break;
+                         }
+                     }
+                 }
+                 return cookieValue;
+             }
+             if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                 // Only send the token to relative URLs i.e. locally.
+                 xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+             }
+         } 
+    });
+    
+</script>
+
+<!-- Function that refreshes/updates the table via ajax -->
+<script>
+
+    function refreshTable(){
+    
+      var tableDiv = $(".users-table");
+    
+      $.ajax({
+                cache: false,
+                dataType: 'html',
+                url: '/users/fetch',
+                success: function(data) {
+                  tableDiv.html(data);
+                },
+                error: function(data){
+                  $('#alert-container').html("<div class='alert alert-danger alert-dismissible fade show' role='alert'><strong>Oops!</strong> We were unable to load user data. Please refresh your page.<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>")
+                }
+            
+              });
+    
+    }
+    
+  </script>
+
+<!-- Handles the delete button POST request -->
+<script>
+      
+    $(document).on('click', '#delete-button', function(e){
+      $.ajax({
+        type: 'POST',
+        cache: false,
+        url: '/users/remove',
+        data:{
+          user_id:$(this).attr("data-id")
+        },
+        success: function(){
+          refreshTable()
+        }
+  
+  
+      });
+  
+    });
+  
+</script>
+
+<!-- Handles/submits form that adds the server -->
+<script>
+
+    $(document).on('submit', '#formCreateUser', function(e){
+    
+    e.preventDefault();
+    
+    $.ajax({
+      type: 'POST',
+      cache: false,
+      url: '/users/create',
+      data:{
+        username:$('#usernameInput').val(),
+        email:$('#emailInput').val(),
+        password:$('#passwordInput').val()
+      },
+      success: function(){
+        $('#modalNewUser').modal('hide');
+      },
+      complete: function(){
+        $('#formCreateUser')[0].reset();
+        refreshTable()
+      }
+    
+    });
+    
+    });
+    
+  </script>
+
 {% endblock %}
