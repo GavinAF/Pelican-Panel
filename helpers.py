@@ -159,9 +159,9 @@ def get_servers(userid):
 
         cur = conn.cursor()
 
-        select_servers_query = '''SELECT * FROM servers WHERE user_id = %s'''
+        select_servers_query = '''SELECT * FROM servers'''
 
-        cur.execute(select_servers_query, (userid, ))
+        cur.execute(select_servers_query)
         rows = cur.fetchall()
         conn.commit()
         print("Selected servers from database")
