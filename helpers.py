@@ -224,11 +224,11 @@ def remove_server(server_id):
         cur = conn.cursor()
         
         # print(username, password, email)
-        remove_server_query = '''DELETE FROM servers WHERE server_id = %s AND user_id = %s'''
+        remove_server_query = '''DELETE FROM servers WHERE server_id = %s'''
 
         user_id = session["user_id"]
 
-        cur.execute(remove_server_query, (server_id, user_id))
+        cur.execute(remove_server_query, (server_id, ))
         conn.commit()
         print("Removed server from database")
 
