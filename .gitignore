@@ -2,3 +2,6 @@
 /config.py
 /wexpect.log
 /__pycache__/*
+/jars/*
+!/jars/.gitkeep
+/servers/*
