@@ -164,11 +164,24 @@ def create():
 def remove():
     if request.method == "POST":
 
-        server_id = request.form.get("server_id")
+        server_id = str(request.form.get("server_id"))
 
-        remove_server(server_id)
+        try:
+            remove_server(server_id)
 
-        return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+            conn = rpyc.connect("localhost", 42069)
+            c = conn.root
+
+            if c.remove_server(server_id):
+                conn.close()
+                return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+            else:
+                conn.close()
+                return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+        except Exception as e:
+            print(e)
+            print("Error while removing server")
+            return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
 
     else:
         return redirect("/")

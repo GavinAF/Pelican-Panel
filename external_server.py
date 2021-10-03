@@ -3,6 +3,7 @@ import rpyc
 import time
 import psycopg2
 import os
+import shutil
 import subprocess
 import wexpect
 from psycopg2.extras import RealDictCursor
@@ -120,6 +121,18 @@ class MyService(rpyc.Service):
         server = Server(server_id)
 
         return True
+
+
+    def exposed_remove_server(self, server_id):
+        print(f"Removing server {server_id}")
+
+        # Check if folder exists then delete it
+        if os.path.isdir(f"servers/{server_id}"):
+            shutil.rmtree(f"servers/{server_id}")
+            return True
+        else:
+            return False
+
 
     def exposed_start_server(self, server_id):
 
