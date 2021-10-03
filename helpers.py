@@ -190,12 +190,11 @@ def create_server(name, memory, slots, port, jar, eula):
 
         cur = conn.cursor()
         
-        # print(username, password, email)
-        insert_server_query = '''INSERT INTO servers (user_id, name, memory, slots, port, jar, eula) VALUES (%s, %s, %s, %s, %s, %s, %s)'''
+        insert_server_query = '''INSERT INTO servers (name, memory, slots, port, jar) VALUES (%s, %s, %s, %s, %s)'''
 
         user_id = session["user_id"]
 
-        cur.execute(insert_server_query, (user_id, name, memory, slots, port, jar, eula))
+        cur.execute(insert_server_query, (name, memory, slots, port, jar))
         conn.commit()
         print("Inserted server into database")
 
