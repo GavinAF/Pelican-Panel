@@ -75,7 +75,7 @@ def servers():
 
             current_id = server[0]
 
-            if not c.is_active(current_id):
+            if not c.checkAlive(current_id):
                 print(f"Server offline {current_id}")
                 players.append("Offline")
             else:
@@ -84,7 +84,7 @@ def servers():
                     status1 = server1.status()
                     players.append(status1.players.online)
                 except:
-                    print("Couldn't reach server: ", server[2])
+                    print("Couldn't reach server: ", server[1])
                     players.append("Unable to query")
 
     except:
@@ -125,11 +125,31 @@ def create():
         if request.form.get("jar"):
             jar = request.form.get("jar")
 
-        if request.form.get("eula"):
-            eula = request.form.get("eula")
 
-        if create_server(name, memory, slots, port, jar, eula):
+        server_id = create_server(name, memory, slots, port, jar)
+
+        if server_id is not None:
             # TODO: Create server via RPyC
+
+            server_id = str(server_id)
+            print(f"The server id is {server_id}")
+
+            try:
+                conn = rpyc.connect("localhost", 42069)
+                c = conn.root
+
+                if c.create_server(server_id):
+                    conn.close()
+                    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+                else:
+                    conn.close()
+                    return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+            except Exception as e:
+                print(e)
+                print("Error while creating server")
+                return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+
+
             return redirect("/servers")
         else:
             # Return HTML error
@@ -173,7 +193,8 @@ def servers_start():
             else:
                 conn.close()
                 return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
-        except:
+        except Exception as e:
+            print(e)
             print("Error while starting server")
             return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
     else:
@@ -258,7 +279,7 @@ def servers_fetch():
 
                 current_id = server[0]
 
-                if not c.is_active(current_id):
+                if not c.checkAlive(current_id):
                     print(f"Server offline {current_id}")
                     players.append("Offline")
                 else:
@@ -267,7 +288,7 @@ def servers_fetch():
                         status1 = server1.status()
                         players.append(status1.players.online)
                     except:
-                        print("Couldn't reach server: ", server[2])
+                        print("Couldn't reach server: ", server[1])
                         players.append("Unable to query")
 
         except:

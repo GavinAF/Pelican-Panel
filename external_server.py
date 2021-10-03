@@ -97,9 +97,19 @@ def checkClass(server_id):
     else:
         return False
 
+def checkAlive(server_id):
+    server_id = str(server_id)
+    server = Server(server_id)
+    if server.p.isalive():
+        return True
+    else:
+        return False
+
 class MyService(rpyc.Service):
 
     def exposed_create_server(self, server_id):
+
+        print(f"Creating server {server_id}")
 
         # Create folder and eula file
         os.makedirs(f"servers/{server_id}")
@@ -108,6 +118,8 @@ class MyService(rpyc.Service):
 
         # Create Server class instance 
         server = Server(server_id)
+
+        return True
 
     def exposed_start_server(self, server_id):
 

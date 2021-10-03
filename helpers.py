@@ -178,8 +178,11 @@ def get_servers(userid):
                 
             return rows
 
-def create_server(name, memory, slots, port, jar, eula):
+def create_server(name, memory, slots, port, jar):
     # Insert server into database
+
+    server_id = None
+
     try:
         conn = psycopg2.connect(
             host = db_info['host'],
@@ -190,11 +193,10 @@ def create_server(name, memory, slots, port, jar, eula):
 
         cur = conn.cursor()
         
-        insert_server_query = '''INSERT INTO servers (name, memory, slots, port, jar) VALUES (%s, %s, %s, %s, %s)'''
-
-        user_id = session["user_id"]
+        insert_server_query = '''INSERT INTO servers (name, memory, slots, port, jar) VALUES (%s, %s, %s, %s, %s) RETURNING server_id'''
 
         cur.execute(insert_server_query, (name, memory, slots, port, jar))
+        server_id = cur.fetchone()[0]
         conn.commit()
         print("Inserted server into database")
 
@@ -208,7 +210,7 @@ def create_server(name, memory, slots, port, jar, eula):
                 conn.close()
                 print("PostgreSQL connection is closed")
 
-            return True
+            return server_id
 
 def remove_server(server_id):
     # Remove server from database
