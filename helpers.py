@@ -10,58 +10,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask import session
 from config import db_info, tables_sql
 
-def check_database():
-    try:
-        conn = psycopg2.connect(
-            host = db_info['host'],
-            user = db_info['username'],
-            password = db_info['password'],
-            port = db_info['port'])
-
-        conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-        cur = conn.cursor()
-
-        select_data = '''SELECT datname FROM pg_database'''
-
-        cur.execute(select_data)
-        databases = cur.fetchall()
-
-        if db_info['database'] in databases:
-            print("Database already exists")
-            return True
-
-        # Create the database
-        cur.execute(sql.SQL('CREATE DATABASE {}').format(sql.Identifier(db_info['database'])))
-        cur.close()
-        conn.close()
-
-        # Connect to new database
-        conn = psycopg2.connect(
-            host = db_info['host'],
-            database= db_info['database'],
-            user = db_info['username'],
-            password = db_info['password'],
-            port = db_info['port'])
-        cur = conn.cursor()
-
-        # Create the tables & columns
-        for command in tables_sql:
-            cur.execute(command)
-        cur.close()
-        conn.commit()
-
-    except (Exception, psycopg2.DatabaseError) as error :
-        print ("Error while checking database", error)
-        return False
-    finally:
-        # Closing database connection.
-            if(conn):
-                cur.close()
-                conn.close()
-                print("PostgreSQL connection is closed")
-
-            return True
-
 def login_user(username, password):
 
     # Check username in database
