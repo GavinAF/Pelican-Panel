@@ -83,7 +83,8 @@ def servers():
                     server1 = MinecraftServer("127.0.0.1", server[4])
                     status1 = server1.status()
                     players.append(status1.players.online)
-                except:
+                except Exception as e:
+                    print(e)
                     print("Couldn't reach server: ", server[1])
                     players.append("Unable to query")
 
@@ -301,7 +302,8 @@ def servers_fetch():
                         server1 = MinecraftServer("127.0.0.1", server[4])
                         status1 = server1.status()
                         players.append(status1.players.online)
-                    except:
+                    except Exception as e:
+                        print(e)
                         print("Couldn't reach server: ", server[1])
                         players.append("Unable to query")
 
