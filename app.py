@@ -10,7 +10,7 @@ import rpyc
 import os
 
 # Custom
-from helpers import login_required, login_user, create_user, get_servers, create_server, remove_server, get_users, remove_user, create_user_panel
+from helpers import login_required, login_user, create_user, get_servers, create_server, remove_server, get_users, remove_user, create_user_panel, check_database
 
 
 # Set application
@@ -21,6 +21,12 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'for dev')
 
 # Make templates auto-reload
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+# Check if database is made, if not create it
+@app.before_first_request
+def before_request():
+    if check_database():
+        print("Database Check Successful")
 
 @app.route("/")
 @login_required
@@ -77,11 +83,13 @@ def servers():
                     server1 = MinecraftServer("127.0.0.1", server[4])
                     status1 = server1.status()
                     players.append(status1.players.online)
-                except:
-                    print("Couldn't reach server: ", server[2])
+                except Exception as e:
+                    print(e)
+                    print("Couldn't reach server: ", server[1])
                     players.append("Unable to query")
 
-    except:
+    except Exception as e:
+        print(e)
         for server in user_servers:
             players.append("Offline")
 
@@ -119,11 +127,30 @@ def create():
         if request.form.get("jar"):
             jar = request.form.get("jar")
 
-        if request.form.get("eula"):
-            eula = request.form.get("eula")
 
-        if create_server(name, memory, slots, port, jar, eula):
-            # TODO: Create server via RPyC
+        server_id = create_server(name, memory, slots, port, jar)
+
+        if server_id is not None:
+
+            server_id = str(server_id)
+            print(f"The server id is {server_id}")
+
+            try:
+                conn = rpyc.connect("localhost", 42069)
+                c = conn.root
+
+                if c.create_server(server_id):
+                    conn.close()
+                    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+                else:
+                    conn.close()
+                    return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+            except Exception as e:
+                print(e)
+                print("Error while creating server")
+                return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+
+
             return redirect("/servers")
         else:
             # Return HTML error
@@ -138,11 +165,24 @@ def create():
 def remove():
     if request.method == "POST":
 
-        server_id = request.form.get("server_id")
+        server_id = str(request.form.get("server_id"))
 
-        remove_server(server_id)
+        try:
+            remove_server(server_id)
 
-        return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+            conn = rpyc.connect("localhost", 42069)
+            c = conn.root
+
+            if c.remove_server(server_id):
+                conn.close()
+                return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+            else:
+                conn.close()
+                return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
+        except Exception as e:
+            print(e)
+            print("Error while removing server")
+            return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
 
     else:
         return redirect("/")
@@ -152,9 +192,8 @@ def remove():
 def servers_start():
     if request.method == "POST":
 
-        server_id = request.form.get("server_id")
+        server_id = str(request.form.get("server_id"))
 
-        # user_id = session["user_id"]
         try:
             conn = rpyc.connect("localhost", 42069)
             c = conn.root
@@ -162,12 +201,15 @@ def servers_start():
             print ("Attemping to start server " + server_id)
 
             if c.start_server(server_id):
+                print("Server Started Successfully")
                 conn.close()
                 return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
             else:
+                print("Server didn't start")
                 conn.close()
                 return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
-        except:
+        except Exception as e:
+            print(e)
             print("Error while starting server")
             return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
     else:
@@ -260,8 +302,9 @@ def servers_fetch():
                         server1 = MinecraftServer("127.0.0.1", server[4])
                         status1 = server1.status()
                         players.append(status1.players.online)
-                    except:
-                        print("Couldn't reach server: ", server[2])
+                    except Exception as e:
+                        print(e)
+                        print("Couldn't reach server: ", server[1])
                         players.append("Unable to query")
 
         except:

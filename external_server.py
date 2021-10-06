@@ -3,9 +3,10 @@ import rpyc
 import time
 import psycopg2
 import os
-import subprocess
+import shutil
 import wexpect
 from psycopg2.extras import RealDictCursor
+import re
 
 class Server():
 
@@ -23,37 +24,50 @@ class Server():
 
     def populate(self):
 
-        self.conn = psycopg2.connect(
-            host = db_info['host'],
-            database= db_info['database'],
-            user = db_info['username'],
-            password = db_info['password'],
-            port = db_info['port'])
+        try:
 
-        self.cur = self.conn.cursor(cursor_factory=RealDictCursor)
+            self.conn = psycopg2.connect(
+                host = db_info['host'],
+                database= db_info['database'],
+                user = db_info['username'],
+                password = db_info['password'],
+                port = db_info['port'])
 
-        sql_query = "SELECT * FROM servers WHERE server_id=%s"
+            self.cur = self.conn.cursor(cursor_factory=RealDictCursor)
 
-        self.cur.execute(sql_query, (self.server_id,))
-        row = self.cur.fetchone()
+            sql_query = "SELECT * FROM servers WHERE server_id=%s"
 
-        attrs = vars(self)
+            self.cur.execute(sql_query, (self.server_id,))
+            row = self.cur.fetchone()
 
-        for name in attrs.keys():
-            for col_name in row:
-                if col_name == name:
-                    setattr(self, name, row[name])
+            attrs = vars(self)
 
-        # Close cursor & connection
-        self.cur.close()
-        self.conn.close()
+            for name in attrs.keys():
+                for col_name in row:
+                    if col_name == name:
+                        setattr(self, name, row[name])
+
+        except Exception as e:
+            print(e)
+
+        finally:
+            # Close cursor & connection
+            self.cur.close()
+            self.conn.close()
 
     def start(self):
-        self.start_command = f"java -Xms1024M -Xmx{self.memory}M -jar ../../jars/{self.jar}.jar nogui"
 
-        self.p = wexpect.spawn(self.start_command, cwd=f"servers/{self.server_id}")
+        try:
+            self.start_command = f"java -Xms1024M -Xmx{self.memory}M -jar ../../jars/{self.jar}.jar nogui"
 
-        if self.p.isalive():
+            self.p = wexpect.spawn(self.start_command, cwd=f"servers/{self.server_id}")
+
+
+        except Exception as e:
+            print(e)
+
+        if self.p is not None:
+            print("STARTING: P is not None")
             return True
         else:
             return False   
@@ -88,6 +102,8 @@ class Server():
             print("self.p is not alive")
             return False
 
+
+# Is there an instance already
 def checkClass(server_id):
 
     current_id = str(server_id)
@@ -97,9 +113,30 @@ def checkClass(server_id):
     else:
         return False
 
+# Is the server running
+def checkAlive(server_id):
+    server_id = str(server_id)
+
+    # If server instance exists, does the console exist? If so, return true
+    if checkClass(server_id):
+        #server = Server(server_id)
+        server = Server.instances[server_id]
+        if server.p is not None:
+            print(f"Server {server_id} is not none")
+            if server.p.isalive():
+                print(f"server {server_id} is not alive")
+                return True
+        else:
+            print(f"Server {server_id} is not alive")
+            return False
+
+    return False
+
 class MyService(rpyc.Service):
 
     def exposed_create_server(self, server_id):
+
+        print(f"Creating server {server_id}")
 
         # Create folder and eula file
         os.makedirs(f"servers/{server_id}")
@@ -109,13 +146,33 @@ class MyService(rpyc.Service):
         # Create Server class instance 
         server = Server(server_id)
 
+        return True
+
+
+    def exposed_remove_server(self, server_id):
+        print(f"Removing server {server_id}")
+
+        # Check if folder exists then delete it
+        if os.path.isdir(f"servers/{server_id}"):
+            shutil.rmtree(f"servers/{server_id}")
+            return True
+        else:
+            return False
+
+
     def exposed_start_server(self, server_id):
 
+        # If server instance exists, use it otherwise create one
         if checkClass(server_id):
-            print(f"Server {server_id} is already started")
-            return True
+            server = Server.instances[server_id]
+        else:
+            server = Server(server_id)
 
-        server = Server(server_id)
+        # Is the server running already?
+        if checkAlive(server_id):
+            print(f"Server {server_id} is already started")
+            return False
+
         print("\nStarting Server " + server_id)
         return server.start()
 
@@ -156,10 +213,11 @@ class MyService(rpyc.Service):
 
         print(f"Checking if {server_id} is active")
 
-        if checkClass(server_id):
+        if checkAlive(server_id):
             print(f"{server_id} is active")
             return True
         else:
+            print(f"{server_id} is not active")
             return False
 
 

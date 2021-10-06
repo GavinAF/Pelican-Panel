@@ -4,9 +4,11 @@ import urllib.parse
 from flask import redirect, render_template, request, session
 from functools import wraps
 import psycopg2
+from psycopg2 import sql
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask import session
-from config import db_info
+from config import db_info, tables_sql
 
 def login_user(username, password):
 
@@ -105,9 +107,9 @@ def get_servers(userid):
 
         cur = conn.cursor()
 
-        select_servers_query = '''SELECT * FROM servers WHERE user_id = %s'''
+        select_servers_query = '''SELECT * FROM servers'''
 
-        cur.execute(select_servers_query, (userid, ))
+        cur.execute(select_servers_query)
         rows = cur.fetchall()
         conn.commit()
         print("Selected servers from database")
@@ -124,8 +126,11 @@ def get_servers(userid):
                 
             return rows
 
-def create_server(name, memory, slots, port, jar, eula):
+def create_server(name, memory, slots, port, jar):
     # Insert server into database
+
+    server_id = None
+
     try:
         conn = psycopg2.connect(
             host = db_info['host'],
@@ -136,12 +141,10 @@ def create_server(name, memory, slots, port, jar, eula):
 
         cur = conn.cursor()
         
-        # print(username, password, email)
-        insert_server_query = '''INSERT INTO servers (user_id, name, memory, slots, port, jar, eula) VALUES (%s, %s, %s, %s, %s, %s, %s)'''
+        insert_server_query = '''INSERT INTO servers (name, memory, slots, port, jar) VALUES (%s, %s, %s, %s, %s) RETURNING server_id'''
 
-        user_id = session["user_id"]
-
-        cur.execute(insert_server_query, (user_id, name, memory, slots, port, jar, eula))
+        cur.execute(insert_server_query, (name, memory, slots, port, jar))
+        server_id = cur.fetchone()[0]
         conn.commit()
         print("Inserted server into database")
 
@@ -155,7 +158,7 @@ def create_server(name, memory, slots, port, jar, eula):
                 conn.close()
                 print("PostgreSQL connection is closed")
 
-            return True
+            return server_id
 
 def remove_server(server_id):
     # Remove server from database
@@ -170,11 +173,11 @@ def remove_server(server_id):
         cur = conn.cursor()
         
         # print(username, password, email)
-        remove_server_query = '''DELETE FROM servers WHERE server_id = %s AND user_id = %s'''
+        remove_server_query = '''DELETE FROM servers WHERE server_id = %s'''
 
         user_id = session["user_id"]
 
-        cur.execute(remove_server_query, (server_id, user_id))
+        cur.execute(remove_server_query, (server_id, ))
         conn.commit()
         print("Removed server from database")
 
