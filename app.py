@@ -75,7 +75,7 @@ def servers():
 
             current_id = server[0]
 
-            if not c.checkAlive(current_id):
+            if not c.is_active(current_id):
                 print(f"Server offline {current_id}")
                 players.append("Offline")
             else:
@@ -87,7 +87,8 @@ def servers():
                     print("Couldn't reach server: ", server[1])
                     players.append("Unable to query")
 
-    except:
+    except Exception as e:
+        print(e)
         for server in user_servers:
             players.append("Offline")
 
@@ -129,7 +130,6 @@ def create():
         server_id = create_server(name, memory, slots, port, jar)
 
         if server_id is not None:
-            # TODO: Create server via RPyC
 
             server_id = str(server_id)
             print(f"The server id is {server_id}")
@@ -191,9 +191,8 @@ def remove():
 def servers_start():
     if request.method == "POST":
 
-        server_id = request.form.get("server_id")
+        server_id = str(request.form.get("server_id"))
 
-        # user_id = session["user_id"]
         try:
             conn = rpyc.connect("localhost", 42069)
             c = conn.root
@@ -201,9 +200,11 @@ def servers_start():
             print ("Attemping to start server " + server_id)
 
             if c.start_server(server_id):
+                print("Server Started Successfully")
                 conn.close()
                 return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
             else:
+                print("Server didn't start")
                 conn.close()
                 return json.dumps({'success':False}), 500, {'ContentType':'application/json'}
         except Exception as e:
@@ -292,7 +293,7 @@ def servers_fetch():
 
                 current_id = server[0]
 
-                if not c.checkAlive(current_id):
+                if not c.is_active(current_id):
                     print(f"Server offline {current_id}")
                     players.append("Offline")
                 else:
