@@ -10,7 +10,7 @@ import rpyc
 import os
 
 # Custom
-from helpers import login_required, login_user, create_user, get_servers, create_server, remove_server, get_users, remove_user, create_user_panel, check_database
+from helpers import login_required, login_user, create_user, get_servers, create_server, remove_server, get_users, remove_user, create_user_panel
 
 
 # Set application
