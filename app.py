@@ -22,12 +22,6 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'for dev')
 # Make templates auto-reload
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-# Check if database is made, if not create it
-@app.before_first_request
-def before_request():
-    if check_database():
-        print("Database Check Successful")
-
 @app.route("/")
 @login_required
 def index():
