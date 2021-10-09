@@ -9,11 +9,11 @@
   <!-- Line Awesome -->
   <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css">
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
   <!-- Material Design Bootstrap -->
-  <link rel="stylesheet" href="static/css/mdb.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/mdb.min.css') }}">
   <!-- Custom Login Page CSS -->
-  <link rel="stylesheet" href="static/css/layout.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
   <!-- Line Awesome Icons -->
   <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css">
 
@@ -113,13 +113,13 @@
 
   <!-- SCRIPTS -->
   <!-- JQuery -->
-  <script src="static/js/jquery-3.4.1.min.js"></script>
+  <script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
   <!-- Bootstrap tooltips -->
-  <script src="static/js/popper.min.js"></script>
+  <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
   <!-- Bootstrap core JavaScript -->
-  <script src="static/js/bootstrap.min.js"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
   <!-- MDB core JavaScript -->
-  <script src="static/js/mdb.min.js"></script>
+  <script src="{{ url_for('static', filename='js/mdb.min.js') }}"></script>
   <!--Custom scripts-->
   {% block custom_scripts %}
   {% endblock %}
