@@ -5,3 +5,4 @@
 /jars/*
 !/jars/.gitkeep
 /servers/*
+!/servers/.gitkeep

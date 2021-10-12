@@ -10,7 +10,7 @@ import rpyc
 import os
 
 # Custom
-from helpers import login_required, login_user, create_user, get_servers, create_server, remove_server, get_users, remove_user, create_user_panel, check_database
+from helpers import login_required, login_user, create_user, get_servers, create_server, remove_server, get_users, remove_user, create_user_panel
 
 
 # Set application
@@ -21,12 +21,6 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'for dev')
 
 # Make templates auto-reload
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-
-# Check if database is made, if not create it
-@app.before_first_request
-def before_request():
-    if check_database():
-        print("Database Check Successful")
 
 @app.route("/")
 @login_required
@@ -334,7 +328,7 @@ def register():
 def selected(slug):
 
     # Select data from database using <slug> aka server_id
-    return render_template("selected.html", server_id = slug)
+    return render_template("selected.html", server_id=slug, current_username = session.get("username"))
 
 @app.route("/users")
 @login_required

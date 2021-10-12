@@ -8,8 +8,7 @@
 {% block sidebar %}
 <li><a href="{{ url_for ('servers') }}">Servers</a></li>
 <li><a href="{{ url_for ('users') }}">Users</a></li>
-<li><a href="{{ url_for ('settings') }}">Settings</a></li>
-<li><a href="#">Support</a></li>
+<!--<li><a href="{{ url_for ('settings') }}">Settings</a></li>-->
 {% endblock %}
 
 {% block header %}Welcome, {{ current_username }}{% endblock %}
@@ -80,13 +79,12 @@
     </div>
     <!-- Grid column -->
   
-    <!-- Grid column -->
+
+    <!-- SETTINGS CARD
+
     <div class="col-lg-4 col-md-6">
-  
-<!-- Card -->
 <div class="card">
 
-    <!-- Card image -->
     <div class="view overlay">
         <div id="settingsIcon"></div>
       <a href="{{ url_for ('settings') }}">
@@ -94,21 +92,18 @@
       </a>
     </div>
   
-    <!-- Card content -->
     <div class="card-body">
   
-      <!-- Title -->
       <h4 class="card-title">Settings</h4>
-      <!-- Text -->
       <p class="card-text">Modify panel specific settings and config.</p>
   
     </div>
   
   </div>
-  <!-- Card -->
   
     </div>
-    <!-- Grid column -->
+
+    -->
   
   </div>
   <!-- Grid row -->

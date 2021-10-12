@@ -5,16 +5,118 @@
 {% block head %}
 {% endblock %}
 
+{% block sidebar %}
+<li><a class="active" href="{{ url_for ('servers') }}">Servers</a></li>
+<li><a href="{{ url_for ('users') }}">Users</a></li>
+<li><a href="{{ url_for ('settings') }}">Settings</a></li>
+<li><a href="#">Support</a></li>
+{% endblock %}
+
+{% block header %}Server Name Here
+
+{% endblock %}
+
+{% block test %}
+<span class="float-right mb-3 mr-2">
+
+    <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a
+            class="nav-link active"
+            id="base-tab"
+            data-mdb-toggle="tab"
+            href="#base-tabs"
+            role="tab"
+            aria-controls="base-tab"
+            aria-selected="true"
+            >Base</a
+          >
+        </li>
+        <li class="nav-item" role="presentation">
+          <a
+            class="nav-link"
+            id="console-tab"
+            data-mdb-toggle="tab"
+            href="#console-tabs"
+            role="tab"
+            aria-controls="console-tab"
+            aria-selected="false"
+            >Console</a
+          >
+        </li>
+        <li class="nav-item" role="presentation">
+          <a
+            class="nav-link"
+            id="properties-tab"
+            data-mdb-toggle="tab"
+            href="#properties-tabs"
+            role="tab"
+            aria-controls="properties-tab"
+            aria-selected="false"
+            >Properties</a
+          >
+        </li>
+      </ul>
+      <!-- Tabs navs -->
+
+
+</span>
+{% endblock %}
+
+
 {% block body %}
 
-<div class="container">
-    <div class="row align-items-center justify-content-center">
-        <div class="col-sm-12">
+<div id="alert-container"></div>
 
-            <h1>You Selected Server # {{server_id}}</h1>
-
+      <!-- Tabs content -->
+      <div class="tab-content" id="ex1-content">
+        <div class="tab-pane fade show active" id="base-tabs" role="tabpanel" aria-labelledby="base-tab">
+          Tab 1 content
         </div>
-    </div>
-</div>
+        <div class="tab-pane fade" id="console-tabs" role="tabpanel" aria-labelledby="console-tab">
+          Tab 2 content
+        </div>
+        <div class="tab-pane fade" id="properties-tabs" role="tabpanel" aria-labelledby="properties-tab">
+          Tab 3 content
+        </div>
+      </div>
+      <!-- Tabs content -->
+
+
+{% endblock %}
+
+
+
+{% block custom_scripts %}
+
+<!-- Script that uses ajaxSetup to configure csrf token when using ajax for POST -->
+<script>
+
+  $.ajaxSetup({ 
+       beforeSend: function(xhr, settings) {
+           function getCookie(name) {
+               var cookieValue = null;
+               if (document.cookie && document.cookie != '') {
+                   var cookies = document.cookie.split(';');
+                   for (var i = 0; i < cookies.length; i++) {
+                       var cookie = jQuery.trim(cookies[i]);
+                       // Does this cookie string begin with the name we want?
+                       if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                           cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                           break;
+                       }
+                   }
+               }
+               return cookieValue;
+           }
+           if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+               // Only send the token to relative URLs i.e. locally.
+               xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+           }
+       } 
+  });
+  
+</script>
+
 
 {% endblock %}
