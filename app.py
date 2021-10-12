@@ -328,7 +328,7 @@ def register():
 def selected(slug):
 
     # Select data from database using <slug> aka server_id
-    return render_template("selected.html", server_id = slug)
+    return render_template("selected.html", server_id=slug, current_username = session.get("username"))
 
 @app.route("/users")
 @login_required
