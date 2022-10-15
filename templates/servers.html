@@ -6,9 +6,9 @@
 {% endblock %}
 
 {% block sidebar %}
-<li><a class="active" href="{{ url_for ('servers') }}">Servers</a></li>
-<li><a href="{{ url_for ('users') }}">Users</a></li>
-<!--<li><a href="{{ url_for ('settings') }}">Settings</a></li>-->
+<li><a class="active" href="{{ url_for ('main.servers') }}">Servers</a></li>
+<li><a href="{{ url_for ('main.users') }}">Users</a></li>
+<!--<li><a href="{{ url_for ('main.settings') }}">Settings</a></li>-->
 {% endblock %}
 
 {% block header %}Servers<span class="table-add float-right mb-3 mr-2"><a href="#" data-toggle="modal" data-target="#modalCreate" class="text-success"><i
@@ -40,7 +40,7 @@
       <div class="modal-body">
 
         <hr> -->
-        <form id="formCreate" action="{{ url_for ('create') }}" method="post" class="needs-validation" >
+        <form id="formCreate" action="{{ url_for ('main.create') }}" method="post" class="needs-validation" >
 
         <p class="text-center">
           <strong>What's your server name?</strong>
@@ -155,13 +155,13 @@
     {% for server in server_data %}
     <tr>
       <th class="align-middle" scope="row">{{ loop.index }}</th>
-      <td class="align-middle">{{ server[1] }}</td>
+      <td class="align-middle">{{ server.name }}</td>
       <td class="align-middle">
 
         {% if players[loop.index - 1] == "Offline" %}
           Offline
         {% else %}
-          Online ({{ players[loop.index - 1] }}/{{ server[3] }} Players)
+          Online ({{ players[loop.index - 1] }}/{{ server.slots }} Players)
         {% endif %}
 
       </td>
@@ -171,22 +171,22 @@
         {% if players[loop.index - 1] == "Offline" %}
 
           <!-- Start Button -->
-          <a id="start-button" type="button" data-id="{{ server[0] }}" class="btn-floating btn-success"><i class="fas fa-play fa-lg" aria-hidden="true"></i></a>
+          <a id="start-button" type="button" data-id="{{ server.id }}" class="btn-floating btn-success"><i class="fas fa-play fa-lg" aria-hidden="true"></i></a>
 
           <!-- Edit Button 
-          <a id="edit-button" href="{{ url_for ('selected', slug=server[0]) }}" class="btn-floating btn-info"><i class="fas fa-pen fa-lg" aria-hidden="true"></i></a>
+          <a id="edit-button" href="{{ url_for ('main.selected', slug=server.id) }}" class="btn-floating btn-info"><i class="fas fa-pen fa-lg" aria-hidden="true"></i></a>
           -->
 
           <!-- Delete Button -->
-          <a id="delete-button" type="button" data-id="{{ server[0] }}" class="btn-floating btn-danger"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
+          <a id="delete-button" type="button" data-id="{{ server.id }}" class="btn-floating btn-danger"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
 
         {% else %}
 
           <!-- Restart Button -->
-          <a id="restart-button" data-id="{{ server[0] }}" type="button" class="btn-floating btn-warning"><i class="fas fa-redo-alt fa-lg" aria-hidden="true"></i></a>
+          <a id="restart-button" data-id="{{ server.id }}" type="button" class="btn-floating btn-warning"><i class="fas fa-redo-alt fa-lg" aria-hidden="true"></i></a>
 
           <!-- Stop Button -->
-          <a id="stop-button" data-id="{{ server[0] }}" type="button" class="btn-floating btn-deep-orange"><i class="fas fa-stop fa-lg" aria-hidden="true"></i></a>
+          <a id="stop-button" data-id="{{ server.id }}" type="button" class="btn-floating btn-deep-orange"><i class="fas fa-stop fa-lg" aria-hidden="true"></i></a>
 
           <!-- Edit Button -->
           <a type="button" class="btn-floating btn-info"><i class="fas fa-pen fa-lg" aria-hidden="true"></i></a>

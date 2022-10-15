@@ -3,7 +3,6 @@
       <th scope="col">#</th>
       <th scope="col">Username</th>
       <th scope="col">Email</th>
-      <th scope="col">Role</th>
       <th scope="col">Actions</th>
 
     </tr>
@@ -13,17 +12,16 @@
     {% for user in user_data %}
     <tr>
       <th class="align-middle" scope="row">{{ loop.index }}</th>
-      <td class="align-middle">{{ user[1] }}</td>
-      <td class="align-middle">{{ user[4] }}</td>
-      <td class="align-middle">{{ user[3] }}</td>
+      <td class="align-middle">{{ user.username }}</td>
+      <td class="align-middle">{{ user.email }}</td>
 
       <td>
 
           <!-- Edit Button -->
-          <a id="edit-button" type="button" data-id="{{ user[0] }}" class="btn-floating btn-info"><i class="fas fa-pen fa-lg" aria-hidden="true"></i></a>
+          <a id="edit-button" type="button" data-id="{{ user.id }}" class="btn-floating btn-info"><i class="fas fa-pen fa-lg" aria-hidden="true"></i></a>
 
           <!-- Delete Button -->
-          <a id="delete-button" type="button" data-id="{{ user[0] }}" class="btn-floating btn-danger"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
+          <a id="delete-button" type="button" data-id="{{ user.id }}" class="btn-floating btn-danger"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
 
       </td>
     </tr>

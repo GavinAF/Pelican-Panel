@@ -6,9 +6,9 @@
 {% endblock %}
 
 {% block sidebar %}
-<li><a class="active" href="{{ url_for ('servers') }}">Servers</a></li>
-<li><a href="{{ url_for ('users') }}">Users</a></li>
-<li><a href="{{ url_for ('settings') }}">Settings</a></li>
+<li><a class="active" href="{{ url_for ('main.servers') }}">Servers</a></li>
+<li><a href="{{ url_for ('main.users') }}">Users</a></li>
+<li><a href="{{ url_for ('main.settings') }}">Settings</a></li>
 <li><a href="#">Support</a></li>
 {% endblock %}
 

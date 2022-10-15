@@ -26,7 +26,7 @@
 
     <!-- Toolbar -->
     <nav class="navbar navbar-expand-sm fixed-top navbar-light" style="background-color: white !important; ">
-        <a class="navbar-brand font-weight-bold" href="{{ url_for ('index') }}">Pelican Panel Logo</a>
+        <a class="navbar-brand font-weight-bold" href="{{ url_for ('main.index') }}">Pelican Panel Logo</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-3" aria-controls="navbarSupportedContent-3" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -49,7 +49,7 @@
                 {{ current_username }}
               </a>
               <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item waves-effect waves-light font-weight-bold font-color-custom-blue" href="{{ url_for ('logout') }}">
+                <a class="dropdown-item waves-effect waves-light font-weight-bold font-color-custom-blue" href="{{ url_for ('main.logout') }}">
                   <i class="fas fa-sign-out-alt fa-lg"></i>
                   Log out
                 </a>
