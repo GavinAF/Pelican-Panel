@@ -1,14 +1,23 @@
-import os
-import requests
-import urllib.parse
-from flask import redirect, render_template, request, session
 from functools import wraps
+from flask import redirect, session
 import psycopg2
 from psycopg2 import sql
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from werkzeug.security import check_password_hash, generate_password_hash
-from flask import session
-from config import db_info, tables_sql
+from config import db_info
+
+
+def login_required(f):
+    """
+    Decorate routes to require login.
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
+
 
 def login_user(username, password):
 
@@ -48,51 +57,6 @@ def login_user(username, password):
                 
             return True
 
-def create_user(username, password, email):
-    # Insert user into database
-    try:
-        conn = psycopg2.connect(
-            host = db_info['host'],
-            database= db_info['database'],
-            user = db_info['username'],
-            password = db_info['password'],
-            port = db_info['port'])
-
-        cur = conn.cursor()
-        
-        # print(username, password, email)
-        insert_user_query = '''INSERT INTO users (username, passhash, email) VALUES (%s, %s, %s) RETURNING id'''
-
-        cur.execute(insert_user_query, (username, generate_password_hash(password), email))
-        rows = cur.fetchall()
-        conn.commit()
-        print("Inserted user into database")
-
-        session["user_id"] = rows[0][0]
-        session["username"] = username
-
-    except (Exception, psycopg2.DatabaseError) as error :
-        print ("Error while inserting user into database", error)
-        return False
-    finally:
-        # Closing database connection.
-            if(conn):
-                cur.close()
-                conn.close()
-                print("PostgreSQL connection is closed")
-
-            return True
-
-def login_required(f):
-    """
-    Decorate routes to require login.
-    """
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("user_id") is None:
-            return redirect("/login")
-        return f(*args, **kwargs)
-    return decorated_function
 
 def get_servers(userid):
 
@@ -125,6 +89,7 @@ def get_servers(userid):
                 print("PostgreSQL connection is closed")
                 
             return rows
+
 
 def create_server(name, memory, slots, port, jar):
     # Insert server into database
@@ -160,6 +125,7 @@ def create_server(name, memory, slots, port, jar):
 
             return server_id
 
+
 def remove_server(server_id):
     # Remove server from database
     try:
@@ -193,6 +159,7 @@ def remove_server(server_id):
 
             # return True
 
+
 def get_users():
 
     # Get users from database
@@ -224,6 +191,9 @@ def get_users():
                 print("PostgreSQL connection is closed")
                 
             return rows
+
+
+
 
 def remove_user(user_id):
     # Remove user from database
@@ -274,6 +244,43 @@ def create_user_panel(username, password, email):
         cur.execute(insert_user_query, (username, generate_password_hash(password), email))
         conn.commit()
         print("Inserted user into database")
+
+    except (Exception, psycopg2.DatabaseError) as error :
+        print ("Error while inserting user into database", error)
+        return False
+    finally:
+        # Closing database connection.
+            if(conn):
+                cur.close()
+                conn.close()
+                print("PostgreSQL connection is closed")
+
+            return True
+
+
+
+def create_user(username, password, email):
+    # Insert user into database
+    try:
+        conn = psycopg2.connect(
+            host = db_info['host'],
+            database= db_info['database'],
+            user = db_info['username'],
+            password = db_info['password'],
+            port = db_info['port'])
+
+        cur = conn.cursor()
+        
+        # print(username, password, email)
+        insert_user_query = '''INSERT INTO users (username, passhash, email) VALUES (%s, %s, %s) RETURNING id'''
+
+        cur.execute(insert_user_query, (username, generate_password_hash(password), email))
+        rows = cur.fetchall()
+        conn.commit()
+        print("Inserted user into database")
+
+        session["user_id"] = rows[0][0]
+        session["username"] = username
 
     except (Exception, psycopg2.DatabaseError) as error :
         print ("Error while inserting user into database", error)
