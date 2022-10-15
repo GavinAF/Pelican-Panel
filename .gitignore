@@ -6,3 +6,4 @@
 !/jars/.gitkeep
 /servers/*
 !/servers/.gitkeep
+/pelican.db
