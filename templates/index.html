@@ -6,9 +6,9 @@
 {% endblock %}
 
 {% block sidebar %}
-<li><a href="{{ url_for ('servers') }}">Servers</a></li>
-<li><a href="{{ url_for ('users') }}">Users</a></li>
-<!--<li><a href="{{ url_for ('settings') }}">Settings</a></li>-->
+<li><a href="{{ url_for ('main.servers') }}">Servers</a></li>
+<li><a href="{{ url_for ('main.users') }}">Users</a></li>
+<!--<li><a href="{{ url_for ('main.settings') }}">Settings</a></li>-->
 {% endblock %}
 
 {% block header %}Welcome, {{ current_username }}{% endblock %}
@@ -28,7 +28,7 @@
     <!-- Card image -->
     <div class="view overlay">
         <div id="serverIcon"></div>
-      <a href="{{ url_for ('servers') }}">
+      <a href="{{ url_for ('main.servers') }}">
         <div class="mask rgba-white-slight"></div>
       </a>
     </div>
@@ -58,7 +58,7 @@
     <!-- Card image -->
     <div class="view overlay">
         <div id="usersIcon"></div>
-      <a href="{{ url_for ('users') }}">
+      <a href="{{ url_for ('main.users') }}">
         <div class="mask rgba-white-slight"></div>
       </a>
     </div>
@@ -87,7 +87,7 @@
 
     <div class="view overlay">
         <div id="settingsIcon"></div>
-      <a href="{{ url_for ('settings') }}">
+      <a href="{{ url_for ('main.settings') }}">
         <div class="mask rgba-white-slight"></div>
       </a>
     </div>
