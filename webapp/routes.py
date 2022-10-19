@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, session, redirect, request
-from helpers import login_required, login_user, get_servers, create_server, remove_server, get_users, create_user_panel, create_user, remove_user
+from webapp.helpers import login_required, login_user, get_servers, create_server, remove_server, get_users, create_user_panel, create_user, remove_user
 from mcstatus import MinecraftServer
 import rpyc
 from datetime import datetime

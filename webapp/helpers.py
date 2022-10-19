@@ -1,8 +1,8 @@
 from functools import wraps
 from flask import redirect, session
 from werkzeug.security import check_password_hash, generate_password_hash
-from models import User, Server
-from extensions import db
+from webapp.models import User, Server
+from webapp.extensions import db
 
 def login_required(f):
     """

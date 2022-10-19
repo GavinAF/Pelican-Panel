@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from routes import main
+from webapp.routes import main
 
 
 def create_app():
@@ -17,7 +17,7 @@ def create_app():
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    from extensions import db
+    from webapp.extensions import db
     db.init_app(app)
     with app.app_context():
         db.create_all()
