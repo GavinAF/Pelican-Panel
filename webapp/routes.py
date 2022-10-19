@@ -54,19 +54,19 @@ def servers():
 
         for server in user_servers:
 
-            current_id = server[0]
+            current_id = server.id
 
             if not c.is_active(current_id):
                 print(f"Server offline {current_id}")
                 players.append("Offline")
             else:
                 try:
-                    server1 = MinecraftServer("127.0.0.1", server[4])
+                    server1 = MinecraftServer("127.0.0.1", server.port)
                     status1 = server1.status()
                     players.append(status1.players.online)
                 except Exception as e:
                     print(e)
-                    print("Couldn't reach server: ", server[1])
+                    print("Couldn't reach server: ", server.name)
                     players.append("Unable to query")
 
     except Exception as e:
@@ -275,19 +275,19 @@ def servers_fetch():
 
             for server in user_servers:
 
-                current_id = server[0]
+                current_id = server.id
 
                 if not c.is_active(current_id):
                     print(f"Server offline {current_id}")
                     players.append("Offline")
                 else:
                     try:
-                        server1 = MinecraftServer("127.0.0.1", server[4])
+                        server1 = MinecraftServer("127.0.0.1", server.port)
                         status1 = server1.status()
                         players.append(status1.players.online)
                     except Exception as e:
                         print(e)
-                        print("Couldn't reach server: ", server[1])
+                        print("Couldn't reach server: ", server.name)
                         players.append("Unable to query")
 
         except:

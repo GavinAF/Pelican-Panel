@@ -23,6 +23,9 @@ def login_user(username, password):
 
         user = User.query.filter_by(username=username).first()
 
+        if not user:
+            return False
+
         if not check_password_hash(user.password, password):
             return False
 
