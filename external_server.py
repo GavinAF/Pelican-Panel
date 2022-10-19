@@ -3,9 +3,9 @@ import time
 import os
 import shutil
 import wexpect
-from extensions import db
-from models import Server as ServerModel
-from app import app
+from webapp.extensions import db
+from webapp.models import Server as ServerModel
+from webapp import app
 
 class Server():
 
@@ -28,14 +28,13 @@ class Server():
             print(f"External Server: Populate: My server id is: {self.server_id}")
 
             with app.app_context():
-                select_server = ServerModel.query.filter_by(id=self.server_id)
+                select_server = ServerModel.query.filter_by(id=self.server_id).one()
 
-            attrs = vars(self)
+                attrs = vars(self)
 
-            for name in attrs.keys():
-                for server_aspect in select_server:
-                    if server_aspect == name:
-                        setattr(self, name, select_server[server_aspect])
+                self.jar = select_server.jar
+                self.memory = select_server.memory
+                            
 
         except Exception as e:
             print(e)
