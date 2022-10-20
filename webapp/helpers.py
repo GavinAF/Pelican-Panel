@@ -1,8 +1,8 @@
 from functools import wraps
 from flask import redirect, session
 from werkzeug.security import check_password_hash, generate_password_hash
-from models import User, Server
-from extensions import db
+from webapp.models import User, Server
+from webapp.extensions import db
 
 def login_required(f):
     """
@@ -22,6 +22,9 @@ def login_user(username, password):
     try:
 
         user = User.query.filter_by(username=username).first()
+
+        if not user:
+            return False
 
         if not check_password_hash(user.password, password):
             return False

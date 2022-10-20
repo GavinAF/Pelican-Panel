@@ -1,4 +1,4 @@
-from extensions import db
+from webapp.extensions import db
 
 # Users Table
 class User(db.Model):

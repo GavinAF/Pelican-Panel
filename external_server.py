@@ -1,12 +1,11 @@
-from config import db_info
 import rpyc
 import time
-import psycopg2
 import os
 import shutil
 import wexpect
-from psycopg2.extras import RealDictCursor
-import re
+from webapp.extensions import db
+from webapp.models import Server as ServerModel
+from webapp import app
 
 class Server():
 
@@ -26,34 +25,22 @@ class Server():
 
         try:
 
-            self.conn = psycopg2.connect(
-                host = db_info['host'],
-                database= db_info['database'],
-                user = db_info['username'],
-                password = db_info['password'],
-                port = db_info['port'])
+            print(f"External Server: Populate: My server id is: {self.server_id}")
 
-            self.cur = self.conn.cursor(cursor_factory=RealDictCursor)
+            with app.app_context():
+                select_server = ServerModel.query.filter_by(id=self.server_id).one()
 
-            sql_query = "SELECT * FROM servers WHERE server_id=%s"
+                attrs = vars(self)
 
-            self.cur.execute(sql_query, (self.server_id,))
-            row = self.cur.fetchone()
-
-            attrs = vars(self)
-
-            for name in attrs.keys():
-                for col_name in row:
-                    if col_name == name:
-                        setattr(self, name, row[name])
+                self.jar = select_server.jar
+                self.memory = select_server.memory
+                            
 
         except Exception as e:
             print(e)
 
         finally:
-            # Close cursor & connection
-            self.cur.close()
-            self.conn.close()
+            pass
 
     def start(self):
 
