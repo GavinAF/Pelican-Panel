@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, session, redirect, request
-from webapp.helpers import login_required, login_user, get_servers, create_server, remove_server, get_users, create_user_panel, create_user, remove_user
+from webapp.helpers import login_required, login_user, get_servers, create_server, remove_server, get_users, create_user_panel, create_user, remove_user, save_jar
 from mcstatus import MinecraftServer
 import rpyc
 from datetime import datetime
@@ -378,9 +378,22 @@ def settings():
     return render_template("settings.html")
 
 
-@main.route("/jars")
+@main.route("/jars", methods=["GET", "POST"])
 @login_required
 def jars():
+
+    if request.method =="POST":
+        jarName = request.form.get("name")
+        if request.files:
+            jarFile = request.files['jarFile']
+            
+            if save_jar(jarFile, jarName):
+                print("Jar saved and added to database")
+                return redirect(request.url)
+            else:
+                return redirect(request.url)
+            
+
     return render_template("jars.html")
 
 @main.route("/logout")

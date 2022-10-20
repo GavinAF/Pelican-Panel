@@ -1,0 +1,257 @@
+{% extends "layout.html" %}
+
+{% block title %}Jars{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block sidebar %}
+<li><a href="{{ url_for ('main.servers') }}">Servers</a></li>
+<li><a href="{{ url_for ('main.users') }}">Users</a></li>
+<li><a class="active" href="{{ url_for ('main.jars') }}">Jars</a></li>
+{% endblock %}
+
+{% block header %}Jars<span class="table-add float-right mb-3 mr-2"><a href="#" data-toggle="modal" data-target="#modalUpload" class="text-success"><i
+  class="fas fa-plus" aria-hidden="true"></i></a></span>{% endblock %}
+
+{% block test %}
+
+{% endblock %}
+
+
+{% block body %}
+
+<!-- Modal: Upload jar -->
+<div class="modal fade right" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+    <div class="modal-content">
+      <!--Header-->
+      <div class="modal-header">
+        <p class="heading lead">Upload Jar
+        </p>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">×</span>
+        </button>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+
+        <hr>
+        <form id="formUpload" action="{{ url_for ('main.jars') }}" method="post" enctype="multipart/form-data" >
+
+        <p class="text-center">
+          <strong>Jar Name</strong>
+        </p>
+        <!--Basic textarea-->
+        <div class="md-form">
+          <input name="name" type="text" id="nameInput" class="md-textarea form-control" required></input>
+          <div class="invalid-feedback">
+            Please provide a file name.
+          </div>
+        </div>
+
+
+        <p class="text-center">
+          <strong>Jar File</strong>
+        </p>
+        <input type="file" class="form-control" id="customFile" name="jarFile" />
+
+
+
+        
+
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer justify-content-center">
+        <button class="btn btn-primary waves-effect waves-light" type="submit">Upload</button>
+        <a type="button" class="btn btn-outline-primary waves-effect" data-dismiss="modal">Cancel</a>
+      </div>
+
+    </form>
+
+    </div>
+  </div>
+</div>
+<!-- Modal: Upload -->
+
+<div id="alert-container"></div>
+
+<table class="table table-striped servers-table">
+
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Status</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {% for server in server_data %}
+    <tr>
+      <th class="align-middle" scope="row">{{ loop.index }}</th>
+      <td class="align-middle">{{ server.name }}</td>
+      <td class="align-middle">
+
+        {% if players[loop.index - 1] == "Offline" %}
+          Offline
+        {% else %}
+          Online ({{ players[loop.index - 1] }}/{{ server.slots }} Players)
+        {% endif %}
+
+      </td>
+
+      <td>
+
+        {% if players[loop.index - 1] == "Offline" %}
+
+          <!-- Start Button -->
+          <a id="start-button" type="button" data-id="{{ server.id }}" class="btn-floating btn-success"><i class="fas fa-play fa-lg" aria-hidden="true"></i></a>
+
+          <!-- Edit Button 
+          <a id="edit-button" href="{{ url_for ('main.selected', slug=server.id) }}" class="btn-floating btn-info"><i class="fas fa-pen fa-lg" aria-hidden="true"></i></a>
+          -->
+
+          <!-- Delete Button -->
+          <a id="delete-button" type="button" data-id="{{ server.id }}" class="btn-floating btn-danger"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
+
+        {% else %}
+
+          <!-- Restart Button -->
+          <a id="restart-button" data-id="{{ server.id }}" type="button" class="btn-floating btn-warning"><i class="fas fa-redo-alt fa-lg" aria-hidden="true"></i></a>
+
+          <!-- Stop Button -->
+          <a id="stop-button" data-id="{{ server.id }}" type="button" class="btn-floating btn-deep-orange"><i class="fas fa-stop fa-lg" aria-hidden="true"></i></a>
+
+          <!-- Edit Button -->
+          <a type="button" class="btn-floating btn-info"><i class="fas fa-pen fa-lg" aria-hidden="true"></i></a>
+        {% endif %}      
+
+
+      </td>
+    </tr>
+    {% endfor %}
+
+
+  </tbody>
+
+</table>
+
+
+{% endblock %}
+
+
+
+{% block custom_scripts %}
+
+<!-- Script that uses ajaxSetup to configure csrf token when using ajax for POST -->
+<script>
+
+  $.ajaxSetup({ 
+       beforeSend: function(xhr, settings) {
+           function getCookie(name) {
+               var cookieValue = null;
+               if (document.cookie && document.cookie != '') {
+                   var cookies = document.cookie.split(';');
+                   for (var i = 0; i < cookies.length; i++) {
+                       var cookie = jQuery.trim(cookies[i]);
+                       // Does this cookie string begin with the name we want?
+                       if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                           cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                           break;
+                       }
+                   }
+               }
+               return cookieValue;
+           }
+           if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+               // Only send the token to relative URLs i.e. locally.
+               xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+           }
+       } 
+  });
+  
+</script>
+
+
+<!-- Function that refreshes/updates the table via ajax -->
+<script>
+
+  function refreshTable(){
+  
+    var tableDiv = $(".servers-table");
+  
+    $.ajax({
+              cache: false,
+              dataType: 'html',
+              url: '/jars/fetch',
+              success: function(data) {
+                tableDiv.html(data);
+              },
+              error: function(data){
+                $('#alert-container').html("<div class='alert alert-danger alert-dismissible fade show' role='alert'><strong>Oops!</strong> We were unable to load server data. Please refresh your page.<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button></div>")
+              }
+          
+            });
+  
+  }
+  
+</script>
+
+<!-- Handles/submits form that uploads the jar -->
+<script>
+
+  $(document).on('submit', '#formUpload', function(e){
+  
+  e.preventDefault();
+  var formData = new FormData(this);
+  
+  $.ajax({
+    type: 'POST',
+    cache: false,
+    url: '/jars',
+    processData: false,
+    contentType: false,
+    data: formData,
+    success: function(){
+      $('#modalUpload').modal('hide');
+      //refreshTable()
+    },
+    complete: function(){
+      $('#formUpload')[0].reset();
+    }
+  
+  });
+  
+  });
+  
+</script>
+
+<!-- Handles the delete button POST request -->
+<script>
+      
+  $(document).on('click', '#delete-button', function(e){
+    $.ajax({
+      type: 'POST',
+      cache: false,
+      url: '/servers/remove',
+      data:{
+        server_id:$(this).attr("data-id")
+      },
+      success: function(){
+        refreshTable()
+      }
+
+
+    });
+
+  });
+
+</script>
+
+{% endblock %}
