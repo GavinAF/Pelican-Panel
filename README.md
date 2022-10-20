@@ -20,12 +20,8 @@ Open source Minecraft server control panel using a Python backend
     git clone https://github.com/GavinAF/Pelican-Panel
     cd Pelican-Panel
     ```
-    
-2.  Rename `config-example.py` to `config.py`
 
-3.  Enter your information into `config.py`
-
-4.  Start the webserver
+4.  Start the program
 	```
-	flask run
+	python .\run.py
 	```
