@@ -8,7 +8,7 @@
 {% block sidebar %}
 <li><a href="{{ url_for ('main.servers') }}">Servers</a></li>
 <li><a href="{{ url_for ('main.users') }}">Users</a></li>
-<!--<li><a href="{{ url_for ('main.settings') }}">Settings</a></li>-->
+<li><a href="{{ url_for ('main.settings') }}">Jars</a></li>
 {% endblock %}
 
 {% block header %}Welcome, {{ current_username }}{% endblock %}
@@ -80,13 +80,13 @@
     <!-- Grid column -->
   
 
-    <!-- SETTINGS CARD
+   
 
     <div class="col-lg-4 col-md-6">
 <div class="card">
 
     <div class="view overlay">
-        <div id="settingsIcon"></div>
+        <div id="jarIcon"></div>
       <a href="{{ url_for ('main.settings') }}">
         <div class="mask rgba-white-slight"></div>
       </a>
@@ -94,8 +94,8 @@
   
     <div class="card-body">
   
-      <h4 class="card-title">Settings</h4>
-      <p class="card-text">Modify panel specific settings and config.</p>
+      <h4 class="card-title">Jars</h4>
+      <p class="card-text">Upload and manage jar files</p>
   
     </div>
   
@@ -103,7 +103,7 @@
   
     </div>
 
-    -->
+    
   
   </div>
   <!-- Grid row -->
