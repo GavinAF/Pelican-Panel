@@ -385,7 +385,8 @@ def jars():
     if request.method =="POST":
         jarName = request.form.get("name")
         if request.files:
-            jarFile = request.files['jarFile']
+
+            jarFile = request.files["jarFile"]
             
             if save_jar(jarFile, jarName):
                 print("Jar saved and added to database")

@@ -165,9 +165,25 @@ def create_user(username, password, email):
             return True
 
 def save_jar(jarFile, jarName):
+
+    filename = jarFile.filename
+    ext = filename.rsplit(".", 1)[1]
+
+    if filename == "":
+        print("JarFile has no name, redirecting")
+        return False
+
+    if not "." in filename:
+        print("No file extension")
+        return False
+    
+    if ext.upper() != "JAR":
+        print("Not a jar file")
+        return False
+
     try:
         # Insert jar into database
-        new_jar = Jar(name=jarName, file=jarFile.filename)
+        new_jar = Jar(name=jarName, file=filename)
         db.session.add(new_jar)
         db.session.commit()
 
