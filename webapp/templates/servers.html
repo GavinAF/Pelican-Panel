@@ -97,7 +97,7 @@
 
           <select id="jarInput" name="jar" class="browser-default custom-select" required>
             {% for jar in jar_data %}
-            <option value="{{ jar.file }}" selected>{{ jar.name }}</option>
+            <option value="{{ jar.id }}" selected>{{ jar.name }}</option>
             {% endfor %}
           </select>
 

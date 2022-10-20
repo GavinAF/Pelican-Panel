@@ -5,6 +5,7 @@ import shutil
 import wexpect
 from webapp.extensions import db
 from webapp.models import Server as ServerModel
+from webapp.models import Jar
 from webapp import app
 
 class Server():
@@ -27,10 +28,11 @@ class Server():
 
             with app.app_context():
                 select_server = ServerModel.query.filter_by(id=self.server_id).one()
+                jarFile = Jar.query.filter_by(id=select_server.jar).one()
 
                 attrs = vars(self)
 
-                self.jar = select_server.jar
+                self.jar = jarFile.file
                 self.memory = select_server.memory
                             
 
