@@ -25,8 +25,6 @@ class Server():
 
         try:
 
-            print(f"External Server: Populate: My server id is: {self.server_id}")
-
             with app.app_context():
                 select_server = ServerModel.query.filter_by(id=self.server_id).one()
 
@@ -45,7 +43,7 @@ class Server():
     def start(self):
 
         try:
-            self.start_command = f"java -Xms1024M -Xmx{self.memory}M -jar ../../jars/{self.jar}.jar nogui"
+            self.start_command = f"java -Xms1024M -Xmx{self.memory}M -jar ../../jars/{self.jar} nogui"
 
             self.p = wexpect.spawn(self.start_command, cwd=f"servers/{self.server_id}")
 
