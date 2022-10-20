@@ -377,6 +377,12 @@ def users_create():
 def settings():
     return render_template("settings.html")
 
+
+@main.route("/jars")
+@login_required
+def jars():
+    return render_template("jars.html")
+
 @main.route("/logout")
 @login_required
 def logout():
