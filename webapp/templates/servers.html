@@ -39,7 +39,7 @@
       <!--Body-->
       <div class="modal-body">
 
-        <hr> -->
+        <hr>
         <form id="formCreate" action="{{ url_for ('main.create') }}" method="post" class="needs-validation" >
 
         <p class="text-center">
@@ -96,10 +96,9 @@
         <div class="md-form">
 
           <select id="jarInput" name="jar" class="browser-default custom-select" required>
-            <option value="vanilla_1.16.3" selected>Vanilla 1.16.3</option>
-            <option value="spigot">Spigot</option>
-            <option value="cauldron">Cauldron</option>
-            <option value="bukkit">Bukkit</option>
+            {% for jar in jar_data %}
+            <option value="{{ jar.file }}" selected>{{ jar.name }}</option>
+            {% endfor %}
           </select>
 
           <div class="invalid-feedback">

@@ -45,6 +45,7 @@ def login():
 def servers():
 
     user_servers = get_servers(session["user_id"])
+    jars = get_jars()
 
     players = []
 
@@ -75,7 +76,7 @@ def servers():
             players.append("Offline")
 
     return render_template("servers.html", now=datetime.utcnow(), server_data=user_servers,
-     current_username = session.get("username"), players=players)
+     current_username = session.get("username"), players=players, jar_data=jars)
 
 
 @main.route("/servers/create", methods=["GET", "POST"])
