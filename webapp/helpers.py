@@ -196,3 +196,15 @@ def save_jar(jarFile, jarName):
         return False
     finally:
             return True
+
+def get_jars():
+    # Get jars from database
+    try:
+        jars = Jar.query.all()
+        print("Selected jars from database")
+
+    except (Exception) as error :
+        print ("Error while selecting jars from database", error)
+        return False
+    finally:
+        return jars
