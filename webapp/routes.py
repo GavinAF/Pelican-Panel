@@ -121,7 +121,7 @@ def create():
                 conn = rpyc.connect("localhost", 42069)
                 c = conn.root
 
-                if c.create_server(server_id):
+                if c.create_server(server_id, port):
                     conn.close()
                     return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
                 else:

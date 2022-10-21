@@ -121,14 +121,20 @@ def checkAlive(server_id):
 
 class MyService(rpyc.Service):
 
-    def exposed_create_server(self, server_id):
+    def exposed_create_server(self, server_id, port):
 
         print(f"Creating server {server_id}")
 
-        # Create folder and eula file
+        # Create folder
         os.makedirs(f"servers/{server_id}")
+
+        # Create eula file
         with open(f"servers/{server_id}/eula.txt", "w") as file:
             file.write("eula=true")
+
+        # Create server.properties with port
+        with open(f"servers/{server_id}/server.properties", "w") as file:
+            file.write(f"query.port={port}\nserver-port={port}")
 
         # Create Server class instance 
         server = Server(server_id)
