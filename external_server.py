@@ -5,6 +5,7 @@ import shutil
 import wexpect
 from webapp.extensions import db
 from webapp.models import Server as ServerModel
+from webapp.models import Jar
 from webapp import app
 
 class Server():
@@ -25,14 +26,13 @@ class Server():
 
         try:
 
-            print(f"External Server: Populate: My server id is: {self.server_id}")
-
             with app.app_context():
                 select_server = ServerModel.query.filter_by(id=self.server_id).one()
+                jarFile = Jar.query.filter_by(id=select_server.jar).one()
 
                 attrs = vars(self)
 
-                self.jar = select_server.jar
+                self.jar = jarFile.file
                 self.memory = select_server.memory
                             
 
@@ -45,7 +45,7 @@ class Server():
     def start(self):
 
         try:
-            self.start_command = f"java -Xms1024M -Xmx{self.memory}M -jar ../../jars/{self.jar}.jar nogui"
+            self.start_command = f"java -Xms1024M -Xmx{self.memory}M -jar ../../jars/{self.jar} nogui"
 
             self.p = wexpect.spawn(self.start_command, cwd=f"servers/{self.server_id}")
 
@@ -121,14 +121,20 @@ def checkAlive(server_id):
 
 class MyService(rpyc.Service):
 
-    def exposed_create_server(self, server_id):
+    def exposed_create_server(self, server_id, port, slots):
 
         print(f"Creating server {server_id}")
 
-        # Create folder and eula file
+        # Create folder
         os.makedirs(f"servers/{server_id}")
+
+        # Create eula file
         with open(f"servers/{server_id}/eula.txt", "w") as file:
             file.write("eula=true")
+
+        # Create server.properties with port & slot count
+        with open(f"servers/{server_id}/server.properties", "w") as file:
+            file.write(f"query.port={port}\nserver-port={port}\nmax-players={slots}")
 
         # Create Server class instance 
         server = Server(server_id)

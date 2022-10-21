@@ -8,7 +8,7 @@
 {% block sidebar %}
 <li><a class="active" href="{{ url_for ('main.servers') }}">Servers</a></li>
 <li><a href="{{ url_for ('main.users') }}">Users</a></li>
-<!--<li><a href="{{ url_for ('main.settings') }}">Settings</a></li>-->
+<li><a href="{{ url_for ('main.jars') }}">Jars</a></li>
 {% endblock %}
 
 {% block header %}Servers<span class="table-add float-right mb-3 mr-2"><a href="#" data-toggle="modal" data-target="#modalCreate" class="text-success"><i
@@ -39,7 +39,7 @@
       <!--Body-->
       <div class="modal-body">
 
-        <hr> -->
+        <hr>
         <form id="formCreate" action="{{ url_for ('main.create') }}" method="post" class="needs-validation" >
 
         <p class="text-center">
@@ -96,10 +96,9 @@
         <div class="md-form">
 
           <select id="jarInput" name="jar" class="browser-default custom-select" required>
-            <option value="vanilla_1.16.3" selected>Vanilla 1.16.3</option>
-            <option value="spigot">Spigot</option>
-            <option value="cauldron">Cauldron</option>
-            <option value="bukkit">Bukkit</option>
+            {% for jar in jar_data %}
+            <option value="{{ jar.id }}" selected>{{ jar.name }}</option>
+            {% endfor %}
           </select>
 
           <div class="invalid-feedback">

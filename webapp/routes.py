@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, session, redirect, request
-from webapp.helpers import login_required, login_user, get_servers, create_server, remove_server, get_users, create_user_panel, create_user, remove_user
+from webapp.helpers import login_required, login_user, get_servers, create_server, remove_server, get_users, create_user_panel, create_user, remove_user, save_jar, get_jars
 from mcstatus import MinecraftServer
 import rpyc
 from datetime import datetime
@@ -45,6 +45,7 @@ def login():
 def servers():
 
     user_servers = get_servers(session["user_id"])
+    jars = get_jars()
 
     players = []
 
@@ -75,7 +76,7 @@ def servers():
             players.append("Offline")
 
     return render_template("servers.html", now=datetime.utcnow(), server_data=user_servers,
-     current_username = session.get("username"), players=players)
+     current_username = session.get("username"), players=players, jar_data=jars)
 
 
 @main.route("/servers/create", methods=["GET", "POST"])
@@ -120,7 +121,7 @@ def create():
                 conn = rpyc.connect("localhost", 42069)
                 c = conn.root
 
-                if c.create_server(server_id):
+                if c.create_server(server_id, port, slots):
                     conn.close()
                     return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
                 else:
@@ -376,6 +377,28 @@ def users_create():
 @login_required
 def settings():
     return render_template("settings.html")
+
+
+@main.route("/jars", methods=["GET", "POST"])
+@login_required
+def jars():
+
+    jars = get_jars()
+
+    if request.method =="POST":
+        jarName = request.form.get("name")
+        if request.files:
+
+            jarFile = request.files["jarFile"]
+
+            if save_jar(jarFile, jarName):
+                print("Jar saved and added to database")
+                return redirect(request.url)
+            else:
+                return redirect(request.url)
+            
+
+    return render_template("jars.html", jar_data=jars)
 
 @main.route("/logout")
 @login_required

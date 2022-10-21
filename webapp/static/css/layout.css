@@ -102,6 +102,16 @@ padding-left: 18%;
     width: 300px;
 }
 
+#jarIcon {
+    background: url("https://raw.githubusercontent.com/FortAwesome/Font-Awesome/6.x/svgs/solid/database.svg") no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: auto;
+    height: 300px;
+    width: 300px;
+}
+
 .view {
     display: grid !important;
     justify-content: center !important;

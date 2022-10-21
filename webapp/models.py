@@ -21,3 +21,9 @@ class Server(db.Model):
 
     def __repr__(self):
         return f"<Server {self.name}>"
+
+# Jars table
+class Jar(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    file = db.Column(db.String(100), unique=True, nullable=False)

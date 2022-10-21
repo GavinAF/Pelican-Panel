@@ -1,8 +1,9 @@
 from functools import wraps
 from flask import redirect, session
 from werkzeug.security import check_password_hash, generate_password_hash
-from webapp.models import User, Server
+from webapp.models import User, Server, Jar
 from webapp.extensions import db
+import os
 
 def login_required(f):
     """
@@ -162,3 +163,48 @@ def create_user(username, password, email):
         return False
     finally:
             return True
+
+def save_jar(jarFile, jarName):
+
+    filename = jarFile.filename
+    ext = filename.rsplit(".", 1)[1]
+
+    if filename == "":
+        print("JarFile has no name, redirecting")
+        return False
+
+    if not "." in filename:
+        print("No file extension")
+        return False
+    
+    if ext.upper() != "JAR":
+        print("Not a jar file")
+        return False
+
+    try:
+        # Insert jar into database
+        new_jar = Jar(name=jarName, file=filename)
+        db.session.add(new_jar)
+        db.session.commit()
+
+        # Save jar file locally
+        jarDirectory = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../jars/")
+        jarFile.save(os.path.join(jarDirectory, jarFile.filename))
+
+    except (Exception) as error :
+        print ("Error while saving/inserting jar", error)
+        return False
+    finally:
+            return True
+
+def get_jars():
+    # Get jars from database
+    try:
+        jars = Jar.query.all()
+        print("Selected jars from database")
+
+    except (Exception) as error :
+        print ("Error while selecting jars from database", error)
+        return False
+    finally:
+        return jars
