@@ -121,7 +121,7 @@ def checkAlive(server_id):
 
 class MyService(rpyc.Service):
 
-    def exposed_create_server(self, server_id, port):
+    def exposed_create_server(self, server_id, port, slots):
 
         print(f"Creating server {server_id}")
 
@@ -132,9 +132,9 @@ class MyService(rpyc.Service):
         with open(f"servers/{server_id}/eula.txt", "w") as file:
             file.write("eula=true")
 
-        # Create server.properties with port
+        # Create server.properties with port & slot count
         with open(f"servers/{server_id}/server.properties", "w") as file:
-            file.write(f"query.port={port}\nserver-port={port}")
+            file.write(f"query.port={port}\nserver-port={port}\nmax-players={slots}")
 
         # Create Server class instance 
         server = Server(server_id)
