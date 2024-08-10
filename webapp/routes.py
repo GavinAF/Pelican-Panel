@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, redirect, request
 from webapp.helpers import login_required, login_user, get_servers, create_server, remove_server, get_users, create_user_panel, create_user, remove_user, save_jar, get_jars
-from mcstatus import MinecraftServer
+from mcstatus import JavaServer
 import rpyc
 from datetime import datetime
 import json
@@ -62,13 +62,13 @@ def servers():
                 players.append("Offline")
             else:
                 try:
-                    server1 = MinecraftServer("127.0.0.1", server.port)
+                    server1 = JavaServer.lookup(f"127.0.0.1:{server.port}")
                     status1 = server1.status()
                     players.append(status1.players.online)
                 except Exception as e:
                     print(e)
                     print("Couldn't reach server: ", server.name)
-                    players.append("Unable to query")
+                    players.append("NA")
 
     except Exception as e:
         print(e)
@@ -283,13 +283,13 @@ def servers_fetch():
                     players.append("Offline")
                 else:
                     try:
-                        server1 = MinecraftServer("127.0.0.1", server.port)
+                        server1 = JavaServer(f"127.0.0.1:{server.port}")
                         status1 = server1.status()
                         players.append(status1.players.online)
                     except Exception as e:
                         print(e)
                         print("Couldn't reach server: ", server.name)
-                        players.append("Unable to query")
+                        players.append("NA")
 
         except:
             for server in user_servers:
